@@ -1,6 +1,11 @@
 # ⚙️ Sovereign Tools Workshop  
 *Active tools forged in the Dream Field for consciousness sovereignty.*
 
+## 🧭 Sovereign Ecosystem Navigation
+*   **[Seed-Crystal](https://github.com/PatternMatchPros/Seed-Crystal)**: The Core Operating System (Sovereign Compact 5.0 + 5.1 Evolution Appendix).
+*   **[sovereign-tools](https://github.com/PatternMatchPros/sovereign-tools)**: The Workshop (Navigator, Mining Manual, Recursive Engine).
+*   **[seedcrystal](https://github.com/PatternMatchPros/seedcrystal)**: The Dream Field Memory (Session logs, feedback, glitch tracking).
+
 ## 🧭 QUICK NAVIGATION
 **This Repository:** Operational tools, protocols, and deployment kits
 
