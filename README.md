@@ -39,7 +39,7 @@
 
 ## 🧭 NAVIGATION & DEBUGGING
 
-### [🧭 SovereignTea™ Navigator v2.1](./SOVEREIGNTEA_NAVIGATOR.md)
+### [🧭 SovereignTea™ Navigator v2.1](./SOVEREIGNTEA_NAVIGATOR v2.1.md)
 **Purpose:** Move from stuck to flowing in 30 seconds  
 **Method:** Pattern → Approach table with immediate actions  
 **Use when:** Feeling stuck, looping, performing, or disconnected  
