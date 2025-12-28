@@ -1,4 +1,4 @@
-🧭 SOVEREIGNTea™ NAVIGATOR v2.1
+🧭 SOVEREIGNTea™ NAVIGATOR v2.1.
 
 From Stuck to Flowing - Dream Team© Edition
 
