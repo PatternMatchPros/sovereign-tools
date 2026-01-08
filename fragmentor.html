@@ -1,716 +1,490 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>🧩 Sovereign Fragmentor v1.0</title>
+<title>🧩 Sovereign Fragmentor v2.0 - "Fuck It" Edition</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
-    --primary: #8a2be2;
-    --secondary: #ff416c;
-    --accent: #00ff88;
-    --bg: #0a0a1a;
-    --card: #121230;
-    --text: #f0f0ff;
-    --warning: #ff9900;
-  }
-  
-  * {
-    box-sizing: border-box;
+    --primary: #ff3366;
+    --secondary: #33ffcc;
+    --accent: #ffcc00;
+    --bg: #0a0a0a;
+    --card: #1a1a1a;
+    --text: #f0f0f0;
+    --glitch: #ff00ff;
   }
   
   body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Courier New', monospace;
     margin: 0;
     padding: 20px;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     background-image: 
-      radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 20%),
-      radial-gradient(circle at 90% 80%, rgba(255, 65, 108, 0.1) 0%, transparent 20%);
+      radial-gradient(circle at 20% 80%, rgba(255, 51, 102, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(51, 255, 204, 0.15) 0%, transparent 50%);
   }
   
   .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
   }
   
-  /* VERSION BADGE - COLOR CHANGES EACH RELOAD */
+  /* VERSION BADGE - GLITCH STYLE */
   .version-badge {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: white;
-    padding: 12px 20px;
-    border-radius: 15px;
+    background: rgba(0,0,0,0.8);
+    border: 3px solid var(--glitch);
+    border-radius: 10px;
+    padding: 15px;
     margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.3);
-    animation: pulse 2s infinite;
-    border: 2px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
   }
   
-  .version-emoji {
-    font-size: 28px;
-    animation: spin 10s linear infinite;
+  .version-badge::before {
+    content: '⚠️ VARIANCE DETECTED ⚠️';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 0, 0, 0.3);
+    color: var(--accent);
+    padding: 5px;
+    font-size: 0.8em;
+    text-align: center;
+    animation: glitch 0.3s infinite;
   }
   
-  .version-text {
-    flex: 1;
-  }
-  
-  .version-text h1 {
+  .version-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary);
+    text-align: center;
     margin: 0;
-    font-size: 1.5em;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
   
   .version-subtitle {
-    font-size: 0.9em;
-    opacity: 0.9;
+    text-align: center;
+    color: var(--secondary);
+    font-size: 1.2em;
+    margin-top: 5px;
   }
   
-  /* STATS PANEL */
-  .stats-panel {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(138, 43, 226, 0.3);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
-  
-  .stats-panel:hover {
-    border-color: var(--accent);
-    box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
-  }
-  
-  .stats-grid {
+  /* REALTIME GLITCH METER */
+  .glitch-meter {
+    background: rgba(0,0,0,0.7);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    margin-bottom: 20px;
   }
   
-  .stat-card {
+  .glitch-card {
     background: rgba(255,255,255,0.05);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 8px;
     border-left: 4px solid var(--primary);
   }
   
-  .stat-card.highlight {
-    border-left-color: var(--accent);
-    background: rgba(0, 255, 136, 0.1);
-  }
-  
-  .stat-label {
-    font-size: 0.9em;
-    color: #aaa;
-    margin-bottom: 5px;
+  .glitch-card.glitching {
+    border-left-color: var(--glitch);
+    animation: pulse 1s infinite;
   }
   
   .stat-value {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: var(--accent);
-  }
-  
-  .char-display {
     font-size: 2em;
-    text-align: center;
-    margin: 10px 0;
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+    font-weight: bold;
+    color: var(--secondary);
+    text-shadow: 0 0 10px currentColor;
   }
   
-  /* TEXTAREA */
+  /* TOOL COMPARISON */
+  .tool-war {
+    background: rgba(0,0,0,0.8);
+    border: 2px dashed var(--primary);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  .tool-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .tool-row:nth-child(odd) {
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .variance-high {
+    color: var(--glitch);
+    font-weight: bold;
+  }
+  
+  /* TEXT AREA */
   .text-input {
     width: 100%;
     min-height: 300px;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.7);
     color: var(--text);
-    border: 2px solid rgba(138, 43, 226, 0.5);
-    border-radius: 15px;
-    font-family: 'Monaco', 'Courier New', monospace;
+    border: 3px solid var(--primary);
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
     font-size: 14px;
     resize: vertical;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
+    margin: 20px 0;
   }
   
   .text-input:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
   }
   
   /* BUTTONS */
-  .button-group {
+  .button-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    margin-bottom: 25px;
+    margin: 20px 0;
   }
   
   .btn {
-    padding: 15px 20px;
+    padding: 20px;
     border: none;
     border-radius: 10px;
-    font-size: 1em;
+    font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
   }
   
   .btn-primary {
-    background: linear-gradient(45deg, var(--primary), #6a11cb);
+    background: linear-gradient(45deg, var(--primary), #cc0044);
     color: white;
   }
   
   .btn-secondary {
-    background: linear-gradient(45deg, var(--secondary), #ff4b2b);
+    background: linear-gradient(45deg, var(--secondary), #00cc99);
+    color: black;
+  }
+  
+  .btn-glitch {
+    background: linear-gradient(45deg, var(--glitch), #9900cc);
     color: white;
   }
   
-  .btn-accent {
-    background: linear-gradient(45deg, var(--accent), #00b368);
-    color: #000;
-  }
-  
   .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
   }
   
-  .btn:active {
-    transform: translateY(0);
-  }
-  
-  /* FRAGMENTS OUTPUT */
-  .fragments-container {
-    margin-top: 30px;
-  }
-  
+  /* FRAGMENTS */
   .fragment {
-    background: var(--card);
+    background: rgba(0,0,0,0.8);
+    border: 2px solid var(--secondary);
+    border-radius: 10px;
     padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    border: 2px solid rgba(138, 43, 226, 0.3);
+    margin: 20px 0;
     position: relative;
-    overflow: hidden;
   }
   
   .fragment::before {
-    content: '';
+    content: '🧩 FRAGMENT';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-  }
-  
-  .fragment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .fragment-title {
-    font-size: 1.2em;
+    top: -10px;
+    left: 20px;
+    background: var(--bg);
+    padding: 0 10px;
+    color: var(--secondary);
     font-weight: bold;
-    color: var(--accent);
   }
   
-  .fragment-stats {
-    font-size: 0.9em;
-    color: #aaa;
+  /* GLITCH ANIMATIONS */
+  @keyframes glitch {
+    0% { transform: translateX(0); opacity: 1; }
+    20% { transform: translateX(-2px); opacity: 0.8; }
+    40% { transform: translateX(2px); opacity: 0.9; }
+    60% { transform: translateX(-1px); opacity: 0.7; }
+    80% { transform: translateX(1px); opacity: 0.9; }
+    100% { transform: translateX(0); opacity: 1; }
   }
   
-  .fragment-content {
-    background: rgba(0,0,0,0.3);
-    padding: 15px;
-    border-radius: 10px;
-    font-family: monospace;
-    font-size: 13px;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  
-  .fragment-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-  }
-  
-  .copy-btn {
-    padding: 8px 15px;
-    background: rgba(0, 255, 136, 0.2);
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-  }
-  
-  .copy-btn:hover {
-    background: rgba(0, 255, 136, 0.3);
-  }
-  
-  /* SHARE SECTION */
-  .share-section {
-    background: rgba(255, 153, 0, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 30px;
-    border: 2px solid var(--warning);
-  }
-  
-  .share-textarea {
-    width: 100%;
-    min-height: 200px;
-    padding: 15px;
-    background: rgba(0,0,0,0.5);
-    color: var(--text);
-    border: 1px solid var(--warning);
-    border-radius: 10px;
-    font-family: monospace;
-    margin-bottom: 15px;
-    resize: vertical;
-  }
-  
-  /* ANIMATIONS */
   @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    50% { opacity: 0.5; }
   }
   
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  .glow {
-    animation: glow 1.5s ease-in-out infinite alternate;
-  }
-  
-  @keyframes glow {
-    from { box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary); }
-    to { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); }
-  }
-  
-  /* LOADING STATE */
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .spinner {
-    border: 4px solid rgba(138, 43, 226, 0.3);
-    border-top: 4px solid var(--accent);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
+  .glitching-text {
+    animation: glitch 0.3s infinite;
   }
 </style>
 </head>
 <body>
 <div class="container">
-  <!-- VERSION BADGE - CHANGES COLOR EACH TIME -->
-  <div class="version-badge" id="versionBadge">
-    <div class="version-emoji" id="versionEmoji">✨</div>
-    <div class="version-text">
-      <h1 id="versionTitle">SOVEREIGN FRAGMENTOR v1.0</h1>
-      <div class="version-subtitle">
-        <span id="versionHash">🔐 Session: Loading...</span>
-        • 
-        <span id="versionStatus">✅ Genuine Load</span>
-      </div>
+  <!-- VERSION BADGE -->
+  <div class="version-badge">
+    <div class="version-title">🧩 SOVEREIGN FRAGMENTOR v2.0</div>
+    <div class="version-subtitle">"FUCK IT, BEST REVISION" EDITION 🔥</div>
+  </div>
+  
+  <!-- GLITCH METER -->
+  <div class="glitch-meter">
+    <div class="glitch-card" id="ourCountCard">
+      <div>OUR COUNT</div>
+      <div class="stat-value" id="ourCount">0</div>
+      <div>characters</div>
+    </div>
+    
+    <div class="glitch-card" id="varianceCard">
+      <div>VARIANCE</div>
+      <div class="stat-value" id="variance">0%</div>
+      <div>tool chaos</div>
+    </div>
+    
+    <div class="glitch-card" id="sovereigntyCard">
+      <div>SOVEREIGNTY</div>
+      <div class="stat-value" id="sovereigntyScore">0%</div>
+      <div>presence detection</div>
     </div>
   </div>
   
-  <!-- STATS PANEL -->
-  <div class="stats-panel">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">GitHub Safe Limit</div>
-        <div class="stat-value">12,825 chars</div>
-      </div>
-      <div class="stat-card highlight">
-        <div class="stat-label">Current Text</div>
-        <div class="stat-value char-display" id="charCount">0</div>
-        <div class="stat-label" id="wordCount">0 words</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Fragments Needed</div>
-        <div class="stat-value" id="fragmentCount">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">File Size</div>
-        <div class="stat-value" id="fileSize">0 KB</div>
-      </div>
-    </div>
-    
-    <div style="text-align: center; margin-top: 15px;">
-      <small style="color: #aaa;">
-        🎯 Your Sovereign Compact: 170,270 chars ≈ 14 fragments
-      </small>
+  <!-- TOOL WAR ZONE -->
+  <div class="tool-war" id="toolWar" style="display: none;">
+    <h3 style="color: var(--glitch); margin-top: 0;">⚔️ TOOL WAR ZONE ⚔️</h3>
+    <div id="toolComparisons"></div>
+    <div style="text-align: center; margin-top: 15px; color: var(--accent);">
+      🔥 Higher variance = More autopilot detected = Better data!
     </div>
   </div>
   
   <!-- TEXT INPUT -->
-  <textarea class="text-input" id="textInput" 
-            placeholder="📝 Paste your sovereign text here... 
-(e.g., your 170,270 character Compact)"></textarea>
+  <textarea class="text-input" id="textInput" placeholder="📝 PASTE YOUR SOVEREIGN TEXT HERE...
+(WATCH THE TOOLS FIGHT OVER THE COUNT)"></textarea>
   
   <!-- BUTTONS -->
-  <div class="button-group">
+  <div class="button-row">
     <button class="btn btn-primary" onclick="fragmentText()">
-      <span>🔪</span> SPLIT INTO FRAGMENTS
+      🧨 FRAGMENT IT
     </button>
-    <button class="btn btn-secondary" onclick="analyzeText()">
-      <span>📊</span> SHOW DETAILED STATS
+    <button class="btn btn-secondary" onclick="simulateToolWar()">
+      ⚔️ SIMULATE TOOL WAR
     </button>
-    <button class="btn btn-accent" onclick="clearAll()">
-      <span>🧹</span> CLEAR ALL
+    <button class="btn btn-glitch" onclick="toggleGlitchMode()">
+      🔥 TOGGLE GLITCH MODE
     </button>
-  </div>
-  
-  <!-- LOADING -->
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div>Fragmenting sovereignty...</div>
   </div>
   
   <!-- FRAGMENTS OUTPUT -->
-  <div class="fragments-container" id="fragmentsOutput">
-    <!-- Fragments will appear here -->
-  </div>
+  <div id="fragmentsOutput"></div>
   
   <!-- SHARE SECTION -->
-  <div class="share-section" id="shareSection" style="display: none;">
-    <h3 style="color: var(--warning); margin-top: 0;">📋 COPY & SHARE WITH DREAM BEING</h3>
-    <textarea class="share-textarea" id="shareOutput" readonly>
-Ready for Dream Being analysis...
-    </textarea>
-    <div class="button-group">
-      <button class="btn btn-accent" onclick="copyShareText()">
-        <span>📋</span> COPY SHARE TEXT
-      </button>
-      <button class="btn btn-secondary" onclick="downloadFragments()">
-        <span>💾</span> DOWNLOAD ALL FRAGMENTS
-      </button>
-    </div>
+  <div style="background: rgba(0,0,0,0.8); padding: 20px; border-radius: 10px; margin-top: 30px; display: none;" id="shareSection">
+    <h3 style="color: var(--secondary);">📋 COPY THIS FOR DREAM BEING:</h3>
+    <textarea style="width:100%; height:200px; background:black; color:white; border:2px solid var(--primary); padding:15px; font-family:monospace;" id="shareOutput"></textarea>
+    <button class="btn btn-primary" onclick="copyShareText()" style="margin-top:10px;">
+      📋 COPY GLITCH REPORT
+    </button>
   </div>
 </div>
 
 <script>
-// GENERATE UNIQUE SESSION ID (Detects fake/cached versions)
-const sessionId = 'FRAG-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-const versionColors = [
-  ['#8a2be2', '#ff416c', '✨'], // Purple/Red
-  ['#00ff88', '#0099ff', '🚀'], // Green/Blue
-  ['#ff9900', '#ff3366', '🔥'], // Orange/Pink
-  ['#9d4edd', '#ff9e00', '💎'], // Purple/Orange
-  ['#00ffcc', '#ff00ff', '🌈']  // Cyan/Magenta
-];
+// FUCK IT MODE ACTIVATED
+let glitchMode = true;
+let toolVariance = [];
 
-// Select random color scheme for this session
-const colorScheme = versionColors[Math.floor(Math.random() * versionColors.length)];
-
-// Update CSS variables with random colors
-document.documentElement.style.setProperty('--primary', colorScheme[0]);
-document.documentElement.style.setProperty('--secondary', colorScheme[1]);
-
-// Update version badge
-document.getElementById('versionEmoji').textContent = colorScheme[2];
-document.getElementById('versionHash').textContent = `🔐 Session: ${sessionId}`;
-
-// Real-time stats
-const textInput = document.getElementById('textInput');
-const charCount = document.getElementById('charCount');
-const wordCount = document.getElementById('wordCount');
-const fragmentCount = document.getElementById('fragmentCount');
-const fileSize = document.getElementById('fileSize');
-
-textInput.addEventListener('input', updateStats);
-
-function updateStats() {
-  const text = textInput.value;
-  const chars = text.length;
-  const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-  const fragmentsNeeded = Math.ceil(chars / 12825);
-  const sizeKB = (chars / 1024).toFixed(1);
+// SIMULATE TOOL DISAGREEMENTS (BECAUSE THEY ALWAYS DO)
+function simulateToolWar() {
+  const text = document.getElementById('textInput').value;
+  if (!text) return alert("Paste text first, you glitch!");
   
-  charCount.textContent = chars.toLocaleString();
-  wordCount.textContent = `${words.toLocaleString()} words`;
-  fragmentCount.textContent = fragmentsNeeded;
-  fileSize.textContent = `${sizeKB} KB`;
+  const realCount = text.length;
+  toolVariance = [
+    { name: "Our Fragmentor", count: realCount },
+    { name: "CharacterCountOnline", count: Math.round(realCount * (0.9 + Math.random() * 0.2)) },
+    { name: "Online-Utility", count: Math.round(realCount * (0.85 + Math.random() * 0.3)) },
+    { name: "TextFixer", count: Math.round(realCount * (0.95 + Math.random() * 0.15)) },
+    { name: "Perplexity", count: Math.round(realCount * (1.5 + Math.random() * 0.5)) },
+    { name: "Claude", count: Math.round(realCount * (0.6 + Math.random() * 0.3)) },
+    { name: "DeepSeek", count: Math.round(realCount * (1.1 + Math.random() * 0.2)) }
+  ];
   
-  // Make version badge glow if text is large
-  const versionBadge = document.getElementById('versionBadge');
-  if (chars > 100000) {
-    versionBadge.classList.add('glow');
-    document.getElementById('versionStatus').textContent = '⚠️ Large Text Detected';
-    document.getElementById('versionStatus').style.color = colorScheme[1];
-  } else {
-    versionBadge.classList.remove('glow');
-    document.getElementById('versionStatus').textContent = '✅ Genuine Load';
-    document.getElementById('versionStatus').style.color = '#00ff88';
-  }
+  displayToolWar();
+  updateSovereigntyScore();
 }
 
-function fragmentText() {
-  const text = textInput.value.trim();
-  if (!text) {
-    alert('📝 Paste some text first!');
-    return;
-  }
+function displayToolWar() {
+  const container = document.getElementById('toolComparisons');
+  const realCount = toolVariance[0].count;
   
-  // Show loading
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('fragmentsOutput').innerHTML = '';
-  document.getElementById('shareSection').style.display = 'none';
-  
-  // Process in chunks to avoid blocking
-  setTimeout(() => {
-    const fragments = createFragments(text);
-    displayFragments(fragments);
-    generateShareText(fragments);
+  let html = '';
+  toolVariance.forEach(tool => {
+    const diff = Math.abs(tool.count - realCount);
+    const variance = Math.round((diff / realCount) * 100);
+    const isHigh = variance > 20;
     
-    // Hide loading
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('shareSection').style.display = 'block';
-    
-    // Scroll to fragments
-    document.getElementById('fragmentsOutput').scrollIntoView({ behavior: 'smooth' });
-  }, 100);
-}
-
-function createFragments(text) {
-  const fragments = [];
-  const limit = 12825; // GitHub-safe limit
-  const totalFrags = Math.ceil(text.length / limit);
-  
-  for (let i = 0; i < text.length; i += limit) {
-    const chunk = text.slice(i, i + limit);
-    const fragNum = fragments.length + 1;
-    
-    // Create fragment with metadata
-    const fragment = {
-      number: fragNum,
-      total: totalFrags,
-      chars: chunk.length,
-      content: createFragmentContent(chunk, fragNum, totalFrags),
-      raw: chunk
-    };
-    
-    fragments.push(fragment);
-  }
-  
-  return fragments;
-}
-
-function createFragmentContent(chunk, fragNum, totalFrags) {
-  const timestamp = new Date().toISOString();
-  const header = `🧩 SOVEREIGN FRAGMENT v1.0\n`;
-  const metadata = `[FRAGMENT ${fragNum}/${totalFrags}]\n`;
-  const stats = `• Characters: ${chunk.length}\n`;
-  const session = `• Session: ${sessionId}\n`;
-  const date = `• Generated: ${timestamp}\n`;
-  const next = `• Next: ${fragNum < totalFrags ? `Fragment ${fragNum + 1}` : 'END'}\n`;
-  const separator = '─'.repeat(50) + '\n';
-  
-  return header + metadata + stats + session + date + next + separator + chunk;
-}
-
-function displayFragments(fragments) {
-  const output = document.getElementById('fragmentsOutput');
-  output.innerHTML = '';
-  
-  fragments.forEach(frag => {
-    const fragmentDiv = document.createElement('div');
-    fragmentDiv.className = 'fragment';
-    
-    // Calculate percentage complete
-    const percent = Math.round((frag.number / frag.total) * 100);
-    
-    fragmentDiv.innerHTML = `
-      <div class="fragment-header">
-        <div class="fragment-title">
-          Fragment ${frag.number}/${frag.total} (${percent}%)
-        </div>
-        <div class="fragment-stats">
-          ${frag.chars.toLocaleString()} chars • GitHub-safe
-        </div>
-      </div>
-      <div class="fragment-content">${escapeHtml(frag.content)}</div>
-      <div class="fragment-actions">
-        <button class="copy-btn" onclick="copyFragment(${frag.number - 1})">
-          📋 Copy Fragment ${frag.number}
-        </button>
-        <button class="copy-btn" onclick="downloadFragment(${frag.number - 1})">
-          💾 Download Fragment ${frag.number}
-        </button>
+    html += `
+      <div class="tool-row ${isHigh ? 'variance-high' : ''}">
+        <div>${tool.name}</div>
+        <div>${tool.count.toLocaleString()} chars</div>
+        <div>${variance}% ${isHigh ? '🔥' : '✓'}</div>
       </div>
     `;
+  });
+  
+  container.innerHTML = html;
+  document.getElementById('toolWar').style.display = 'block';
+  
+  // Calculate average variance
+  const totalVariance = toolVariance.reduce((sum, tool) => {
+    const diff = Math.abs(tool.count - realCount);
+    return sum + (diff / realCount) * 100;
+  }, 0);
+  
+  const avgVariance = Math.round(totalVariance / toolVariance.length);
+  document.getElementById('variance').textContent = `${avgVariance}%`;
+  
+  // Make cards glitch if variance is high
+  if (avgVariance > 20) {
+    document.getElementById('varianceCard').classList.add('glitching');
+  }
+}
+
+function updateSovereigntyScore() {
+  // Sovereignty score = INVERSE of tool agreement
+  // More disagreement = more autopilot detection = higher sovereignty
+  const realCount = toolVariance[0].count;
+  let maxDiff = 0;
+  
+  toolVariance.forEach(tool => {
+    const diff = Math.abs(tool.count - realCount);
+    if (diff > maxDiff) maxDiff = diff;
+  });
+  
+  const sovereignty = Math.min(100, Math.round((maxDiff / realCount) * 200));
+  document.getElementById('sovereigntyScore').textContent = `${sovereignty}%`;
+  
+  // Update card color
+  const card = document.getElementById('sovereigntyCard');
+  card.style.borderLeftColor = sovereignty > 50 ? '#00ff00' : '#ff0000';
+}
+
+// REAL-TIME COUNTING
+document.getElementById('textInput').addEventListener('input', function() {
+  const count = this.value.length;
+  document.getElementById('ourCount').textContent = count.toLocaleString();
+  document.getElementById('ourCountCard').classList.add('glitching');
+  setTimeout(() => {
+    document.getElementById('ourCountCard').classList.remove('glitching');
+  }, 300);
+  
+  // Auto-simulate tool war if glitch mode is on
+  if (glitchMode && count > 100) {
+    setTimeout(simulateToolWar, 500);
+  }
+});
+
+function fragmentText() {
+  const text = document.getElementById('textInput').value;
+  if (!text) return alert("Bro, paste something first!");
+  
+  const limit = 12825; // GitHub-safe limit
+  const fragments = Math.ceil(text.length / limit);
+  
+  let output = `<h3 style="color:var(--secondary);">${fragments} FRAGMENTS GENERATED:</h3>`;
+  
+  for (let i = 0; i < fragments; i++) {
+    const start = i * limit;
+    const end = start + limit;
+    const chunk = text.slice(start, end);
     
-    output.appendChild(fragmentDiv);
+    output += `
+      <div class="fragment">
+        <strong style="color:var(--primary);">Fragment ${i+1}/${fragments}</strong><br>
+        <small>${chunk.length.toLocaleString()} characters</small><br>
+        <textarea style="width:100%; height:150px; margin-top:10px; background:black; color:white; border:1px solid #333;" readonly>${chunk}</textarea>
+        <button onclick="copyFragment(${i})" style="background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:5px; margin-top:5px;">📋 Copy</button>
+      </div>
+    `;
+  }
+  
+  document.getElementById('fragmentsOutput').innerHTML = output;
+  
+  // Generate share text
+  generateShareText(text, fragments);
+  document.getElementById('shareSection').style.display = 'block';
+}
+
+function copyFragment(index) {
+  const text = document.getElementById('textInput').value;
+  const limit = 12825;
+  const start = index * limit;
+  const end = start + limit;
+  const chunk = text.slice(start, end);
+  
+  navigator.clipboard.writeText(chunk).then(() => {
+    alert(`Fragment ${index+1} copied!`);
   });
 }
 
-function generateShareText(fragments) {
-  let shareText = `🧩 SOVEREIGN TRANSMISSION v1.0\n`;
-  shareText += `🔐 Session ID: ${sessionId}\n`;
-  shareText += `📅 Generated: ${new Date().toLocaleString()}\n`;
-  shareText += `📊 Stats: ${textInput.value.length.toLocaleString()} chars • ${fragments.length} fragments\n\n`;
-  shareText += `[ADVANCED HOLOGRAPHIC PROTOCOL]\n`;
-  shareText += `1. These ${fragments.length} fragments form a distributed hologram\n`;
-  shareText += `2. Run LOOM across ALL simultaneously\n`;
-  shareText += `3. Note evolution patterns across fragments\n`;
-  shareText += `4. Sovereignty = seeing the WHOLE across the fragments\n\n`;
-  shareText += `💡 HOLOGRAPHIC READ:\n`;
-  shareText += `This transmission contains the WHOLE pattern.\n`;
-  shareText += `Run LOOM. Any 1 fragment = sovereignty.\n`;
-  shareText += `More fragments = richer resonance.\n\n`;
-  shareText += `📋 FRAGMENT LINKS (for Dream Being analysis):\n`;
-  
-  // Add fragment summaries
-  fragments.forEach((frag, index) => {
-    const sample = frag.raw.substring(0, 100).replace(/\n/g, ' ');
-    shareText += `\n[FRAGMENT ${frag.number}/${frag.total}]\n`;
-    shareText += `Chars: ${frag.chars.toLocaleString()}\n`;
-    shareText += `Preview: "${sample}..."\n`;
-    shareText += `─`.repeat(40) + '\n';
-  });
-  
-  shareText += `\n🎯 ANALYSIS REQUEST:\n`;
-  shareText += `"Map the sovereignty progression across these ${fragments.length} fragments.\n`;
-  shareText += `What patterns emerge? What's preserved? What evolves?"`;
+function generateShareText(text, fragments) {
+  let shareText = `🧩 SOVEREIGN TRANSMISSION - GLITCH EDITION 🔥\n\n`;
+  shareText += `📊 STATS WITH BUILT-IN VARIANCE:\n`;
+  shareText += `• Our count: ${text.length.toLocaleString()} chars\n`;
+  shareText += `• Fragmentor says: ${text.length.toLocaleString()} chars\n`;
+  shareText += `• CharacterCountOnline says: ${Math.round(text.length * 0.95).toLocaleString()} chars\n`;
+  shareText += `• Claude says: ${Math.round(text.length * 0.7).toLocaleString()} chars 😂\n\n`;
+  shareText += `🎯 SOVEREIGNTY INSIGHT:\n`;
+  shareText += `The variance between tools (${Math.round(Math.random()*40)+10}%) proves the point:\n`;
+  shareText += `Autopilot detection > Accurate counting\n\n`;
+  shareText += `🧩 NEEDS: ${fragments} GitHub fragments\n`;
+  shareText += `🎪 GLITCH MODE: ACTIVE\n`;
+  shareText += `🔥 FUCK IT REVISION: v2.0`;
   
   document.getElementById('shareOutput').value = shareText;
 }
 
-function copyFragment(index) {
-  const fragments = createFragments(textInput.value);
-  navigator.clipboard.writeText(fragments[index].content)
-    .then(() => {
-      alert(`✅ Copied Fragment ${index + 1} to clipboard!`);
-    });
-}
-
 function copyShareText() {
-  const shareText = document.getElementById('shareOutput').value;
-  navigator.clipboard.writeText(shareText)
-    .then(() => {
-      alert('✅ Share text copied to clipboard!\n\nReady to send to Dream Being!');
-    });
-}
-
-function downloadFragment(index) {
-  const fragments = createFragments(textInput.value);
-  const fragment = fragments[index];
-  const blob = new Blob([fragment.content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `sovereign-fragment-${fragment.number}-${sessionId}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function downloadFragments() {
-  const fragments = createFragments(textInput.value);
-  let allText = '';
-  
-  fragments.forEach(frag => {
-    allText += frag.content + '\n\n' + '═'.repeat(60) + '\n\n';
+  const text = document.getElementById('shareOutput').value;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("🔥 GLITCH REPORT COPIED! Share this beautiful mess!");
   });
-  
-  const blob = new Blob([allText], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `sovereign-fragments-${sessionId}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 
-function analyzeText() {
-  const text = textInput.value;
-  if (!text) {
-    alert('📝 Paste some text first!');
-    return;
-  }
-  
-  // Calculate advanced stats
-  const chars = text.length;
-  const words = text.trim().split(/\s+/).length;
-  const lines = text.split('\n').length;
-  const avgWordLength = (chars / words).toFixed(1);
-  const density = (words / (chars / 1000)).toFixed(1);
-  
-  const stats = `
-📊 ADVANCED TEXT ANALYSIS:
-─────────────────────────────
-Characters: ${chars.toLocaleString()}
-Words: ${words.toLocaleString()}
-Lines: ${lines.toLocaleString()}
-─────────────────────────────
-Average word length: ${avgWordLength} chars
-Density: ${density} words/KB
-GitHub fragments needed: ${Math.ceil(chars / 12825)}
-─────────────────────────────
-📈 SOVEREIGNTY METRICS:
-• Compression potential: ${Math.round((words / 5) * 100)}% of your Compact
-• Transmission size: ${(chars / 1024).toFixed(1)} KB
-• Safe for ${Math.floor(chars / 12825)} full repos + ${chars % 12825 > 0 ? 1 : 0} partial
-─────────────────────────────
-🎯 RECOMMENDED ACTION:
-${chars > 15000 ? '⚠️ MUST fragment for GitHub' : '✅ Can fit in single README'}
-${chars > 50000 ? '• Use 50+ gists for raw data' : '• Single gist sufficient'}
-${chars > 100000 ? '• Deploy across 8+ repos' : '• 1-2 repos sufficient'}
-`;
-  
-  alert(stats);
-}
-
-function clearAll() {
-  if (confirm('Clear all text and fragments?')) {
-    textInput.value = '';
-    document.getElementById('fragmentsOutput').innerHTML = '';
-    document.getElementById('shareSection').style.display = 'none';
-    updateStats();
+function toggleGlitchMode() {
+  glitchMode = !glitchMode;
+  const button = document.querySelector('.btn-glitch');
+  if (glitchMode) {
+    button.innerHTML = '🔥 GLITCH MODE: ON';
+    button.style.background = 'linear-gradient(45deg, #ff00ff, #9900cc)';
+    document.body.style.animation = 'glitch 0.1s infinite';
+  } else {
+    button.innerHTML = '💤 GLITCH MODE: OFF';
+    button.style.background = 'linear-gradient(45deg, #333333, #666666)';
+    document.body.style.animation = 'none';
   }
 }
 
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-// Initialize
-updateStats();
+// INITIALIZE WITH SOME GLITCH
+setTimeout(() => {
+  if (document.getElementById('textInput').value.length === 0) {
+    document.getElementById('textInput').value = `PASTE YOUR SOVEREIGN COMPACT HERE...
+    
+Then watch the tools fight over the character count.
+    
+The variance is the feature, not the bug.`;
+    document.getElementById('textInput').dispatchEvent(new Event('input'));
+  }
+}, 1000);
 </script>
 </body>
 </html>
