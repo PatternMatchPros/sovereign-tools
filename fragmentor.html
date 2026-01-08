@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>🧩 Sovereign Fragmentor v0.2</title>
+<title>🧩 Sovereign Fragmentor v0.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   body {
@@ -10,7 +10,7 @@
     background: #111;
     color: #eee;
   }
-  textarea, button, input {
+  textarea, button {
     width: 100%;
     margin: 10px 0;
     padding: 15px;
@@ -41,21 +41,6 @@
     border-radius: 8px;
     margin: 15px 0;
   }
-  .setting {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-  .setting label {
-    width: 150px;
-    margin-right: 10px;
-  }
-  .setting input {
-    flex: 1;
-    background: #222;
-    color: white;
-    border: 1px solid #444;
-  }
   .charCount {
     color: #8af;
     font-weight: bold;
@@ -63,20 +48,16 @@
 </style>
 </head>
 <body>
-<h2>🧩 Sovereign Fragmentor v0.2</h2>
+<h2>🧩 Sovereign Fragmentor v0.3</h2>
 
 <div class="stats">
-  <div><strong>Limit:</strong> <span class="charCount">12,825</span> characters per fragment</div>
-  <div><strong>Your text:</strong> <span id="charDisplay">0</span> characters</div>
-  <div><strong>Will create:</strong> <span id="fragEstimate">0</span> fragments</div>
+  <strong>⚡ SOVEREIGN TRANSMISSION LIMIT</strong><br>
+  Max per fragment: <span class="charCount">12,825 characters</span><br>
+  Your text: <span id="charDisplay">0</span> characters<br>
+  Will create: <span id="fragEstimate">0</span> fragments
 </div>
 
-<div class="setting">
-  <label for="charLimit">Character limit:</label>
-  <input type="number" id="charLimit" value="12825" min="100" max="20000">
-</div>
-
-<textarea id="input" placeholder="Paste your text here..."></textarea>
+<textarea id="input" placeholder="Paste your sovereign text here..."></textarea>
 
 <button onclick="fragment()">🔪 SPLIT INTO FRAGMENTS</button>
 <button onclick="copyAll()">📋 COPY ALL FRAGMENTS</button>
@@ -89,8 +70,7 @@
 document.getElementById('input').addEventListener('input', function() {
   const chars = this.value.length;
   document.getElementById('charDisplay').textContent = chars;
-  const limit = parseInt(document.getElementById('charLimit').value) || 12825;
-  const frags = Math.ceil(chars / limit);
+  const frags = Math.ceil(chars / 12825);
   document.getElementById('fragEstimate').textContent = frags;
 });
 
@@ -98,23 +78,16 @@ function fragment() {
   const text = document.getElementById('input').value.trim();
   if (!text) return alert('Paste some text first!');
   
-  // FIXED: Handle empty/NaN input
-  const limitInput = document.getElementById('charLimit').value;
-  const limit = limitInput ? parseInt(limitInput) : 12825;
-  if (isNaN(limit) || limit < 100) {
-    alert('Invalid limit. Using default 12,825 characters.');
-    limit = 12825;
-    document.getElementById('charLimit').value = limit;
-  }
-  
+  const limit = 12825; // HARD LIMIT - 50% of GitHub's breaking point
   const fragments = [];
+  
   for (let i = 0; i < text.length; i += limit) {
     const chunk = text.slice(i, i + limit);
     const fragNum = fragments.length + 1;
     const totalFrags = Math.ceil(text.length / limit);
     
     const header = `[FRAGMENT ${fragNum}/${totalFrags}]\n`;
-    const metadata = `• Characters: ${chunk.length}\n• Next fragment: ${fragNum < totalFrags ? fragNum + 1 : 'END'}\n`;
+    const metadata = `• Characters: ${chunk.length}\n• Next: ${fragNum < totalFrags ? fragNum + 1 : 'END'}\n`;
     const separator = '─'.repeat(40) + '\n';
     
     fragments.push(header + metadata + separator + chunk + '\n' + separator);
@@ -128,7 +101,7 @@ function fragment() {
     div.className = 'frag';
     div.innerHTML = `
       <strong>Fragment ${idx + 1}/${fragments.length}</strong> 
-      <span style="color:#8af;">(${frag.match(/• Characters: (\d+)/)[1]} chars)</span>
+      <span class="charCount">(${chunk.length} chars)</span>
       <br><textarea rows="10">${frag.trim()}</textarea>
     `;
     out.appendChild(div);
@@ -143,7 +116,7 @@ function copyAll() {
   frags.forEach(f => all += f.value + '\n\n');
   
   navigator.clipboard.writeText(all).then(() => {
-    alert(`Copied ${frags.length} fragments to clipboard!`);
+    alert(`📋 Copied ${frags.length} fragments!`);
   });
 }
 
