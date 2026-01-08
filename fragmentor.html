@@ -1,571 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧩 SOVEREIGN FRAGMENTOR v2.0 — LIMIT MASTER</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: #0f0f1a;
-            color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-        h1 {
-            color: #ffaa33;
-            text-align: center;
-            grid-column: 1 / -1;
-        }
-        .panel {
-            background: #1a1a2a;
-            border: 2px solid #333344;
-            border-radius: 10px;
-            padding: 20px;
-        }
-        textarea, pre, input, select {
-            width: 100%;
-            background: #252535;
-            color: #e0e0ff;
-            border: 1px solid #444455;
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        button {
-            background: linear-gradient(135deg, #33aaff, #2288ff);
-            color: black;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 5px;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background: linear-gradient(135deg, #66ccff, #44aaff);
-            transform: translateY(-2px);
-        }
-        .danger {
-            background: linear-gradient(135deg, #ff3355, #dd1133);
-        }
-        .success {
-            background: linear-gradient(135deg, #33ff88, #22cc66);
-        }
-        .fragment {
-            background: #252535;
-            border-left: 5px solid #ffaa33;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-            position: relative;
-        }
-        .fragment-header {
-            background: #333344;
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            font-family: monospace;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-            padding: 15px;
-            background: #222233;
-            border-radius: 8px;
-        }
-        .stat-box {
-            text-align: center;
-            padding: 10px;
-            background: #2a2a3a;
-            border-radius: 5px;
-        }
-        .warning {
-            background: #331111;
-            color: #ff8888;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 10px 0;
-            border-left: 4px solid #ff5555;
-        }
-        .info {
-            background: #113333;
-            color: #88ffaa;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 10px 0;
-            border-left: 4px solid #33ff88;
-        }
-        .limit-slider {
-            width: 100%;
-            margin: 10px 0;
-        }
-        .slider-value {
-            text-align: center;
-            font-weight: bold;
-            color: #ffaa33;
-        }
-        .fragment-tools {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        .copy-btn {
-            background: #333344;
-            color: #aaddff;
-            border: 1px solid #555566;
-            padding: 4px 8px;
-            font-size: 12px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .metadata {
-            font-size: 12px;
-            color: #aaaacc;
-            margin-top: 5px;
-            padding: 5px;
-            background: #2a2a3a;
-            border-radius: 3px;
-        }
-    </style>
+<title>🧩 Sovereign Fragmentor v0.2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    background: #111;
+    color: #eee;
+  }
+  textarea, button, input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  textarea {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    height: 200px;
+  }
+  button {
+    background: #28a;
+    color: white;
+    border: none;
+    font-weight: bold;
+  }
+  .frag {
+    margin: 15px 0;
+    padding: 15px;
+    background: #222;
+    border-radius: 8px;
+  }
+  .stats {
+    padding: 15px;
+    background: #333;
+    border-radius: 8px;
+    margin: 15px 0;
+  }
+  .setting {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  .setting label {
+    width: 150px;
+    margin-right: 10px;
+  }
+  .setting input {
+    flex: 1;
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+  }
+  .charCount {
+    color: #8af;
+    font-weight: bold;
+  }
+</style>
 </head>
 <body>
-    <h1>🧩 SOVEREIGN FRAGMENTOR v2.0 — LIMIT MASTER</h1>
-    
-    <div class="warning">
-        ⚠️ <strong>GITHUB RAW LIMIT:</strong> Observed truncation at ~29,000 characters.
-        <strong>2X Consistent limit:</strong> 14,500 chars (50% safety margin).
-        Fragments auto-capped to your chosen limit.
-    </div>
-    
-    <div class="container">
-        <!-- LEFT PANEL: CONTROLS -->
-        <div class="panel">
-            <h3>⚙️ FRAGMENT SETTINGS</h3>
-            
-            <div class="stats">
-                <div class="stat-box">
-                    <div>Character Limit</div>
-                    <input type="number" id="charLimit" value="14500" min="100" max="50000" style="width: 100%;">
-                </div>
-                <div class="stat-box">
-                    <div>Word Limit</div>
-                    <input type="number" id="wordLimit" value="2500" min="50" max="10000" style="width: 100%;">
-                </div>
-                <div class="stat-box">
-                    <div>Safety Margin</div>
-                    <select id="safetyMargin" style="width: 100%;">
-                        <option value="2">2x (Ultra Safe)</option>
-                        <option value="1.5">1.5x (Balanced)</option>
-                        <option value="1.25">1.25x (Aggressive)</option>
-                        <option value="1">1x (Live Dangerously)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div>
-                <strong>Split By:</strong><br>
-                <label><input type="checkbox" id="splitChars" checked> Characters</label>
-                <label><input type="checkbox" id="splitWords"> Words</label>
-                <label><input type="checkbox" id="splitLines"> Lines</label>
-                <label><input type="checkbox" id="splitSections"> Sections (## Headings)</label>
-            </div>
-            
-            <div>
-                <strong>Add Sovereignty Metadata:</strong><br>
-                <label><input type="checkbox" id="addHeaders" checked> Fragment Headers</label>
-                <label><input type="checkbox" id="addHooks"> Sovereignty Hooks</label>
-                <label><input type="checkbox" id="addConnections"> Network Connections</label>
-                <label><input type="checkbox" id="addTriggers"> Pattern Triggers</label>
-            </div>
-            
-            <div>
-                <strong>Transmission Format:</strong><br>
-                <select id="outputFormat" style="width: 100%;">
-                    <option value="markdown">GitHub README (.md)</option>
-                    <option value="gist">Gist Fragment</option>
-                    <option value="sovereign">Sovereign Hologram</option>
-                    <option value="plain">Plain Text</option>
-                </select>
-            </div>
-            
-            <div class="info">
-                <strong>💡 Pro Tip:</strong> Set limit to 13,050 chars for 2x safety on observed 29K GitHub limit.
-            </div>
-        </div>
-        
-        <!-- RIGHT PANEL: INPUT/OUTPUT -->
-        <div class="panel">
-            <h3>📥 INPUT TEXT</h3>
-            <textarea id="inputText" rows="15" placeholder="Paste your sovereign text here..."></textarea>
-            
-            <div style="text-align: center;">
-                <button onclick="analyzeText()">📊 ANALYZE TEXT</button>
-                <button onclick="fragmentText()" class="success">🔪 FRAGMENT NOW</button>
-                <button onclick="clearAll()" class="danger">🧹 CLEAR ALL</button>
-            </div>
-            
-            <div id="analysis" class="stats" style="display: none;">
-                <!-- Dynamic analysis will appear here -->
-            </div>
-            
-            <h3>📤 OUTPUT FRAGMENTS (<span id="fragmentCount">0</span>)</h3>
-            <div id="output"></div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <button onclick="copyAllFragments()">📋 COPY ALL FRAGMENTS</button>
-                <button onclick="downloadFragments()">💾 DOWNLOAD AS FILES</button>
-                <button onclick="generateTransmission()">🚀 GENERATE TRANSMISSION</button>
-            </div>
-            
-            <pre id="transmission" style="display: none;"></pre>
-        </div>
-    </div>
-    
-    <!-- TRANSMISSION MODAL (hidden by default) -->
-    <div id="transmissionModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; padding: 50px;">
-        <div style="background: #1a1a2a; padding: 30px; border-radius: 10px; max-width: 800px; margin: auto; max-height: 80vh; overflow-y: auto;">
-            <h2>🚀 SOVEREIGN TRANSMISSION PROTOCOL</h2>
-            <pre id="transmissionContent"></pre>
-            <button onclick="copyTransmission()" class="success">📋 COPY TRANSMISSION</button>
-            <button onclick="closeTransmission()" style="background: #555566;">❌ CLOSE</button>
-        </div>
-    </div>
+<h2>🧩 Sovereign Fragmentor v0.2</h2>
 
-    <script>
-        // Constants
-        const OBSERVED_GITHUB_LIMIT = 29000; // characters
-        
-        // Elements
-        const inputText = document.getElementById('inputText');
-        const outputDiv = document.getElementById('output');
-        const fragmentCount = document.getElementById('fragmentCount');
-        const transmission = document.getElementById('transmission');
-        const analysisDiv = document.getElementById('analysis');
-        const transmissionModal = document.getElementById('transmissionModal');
-        const transmissionContent = document.getElementById('transmissionContent');
-        
-        // Analysis function
-        function analyzeText() {
-            const text = inputText.value.trim();
-            if (!text) return alert('Paste text first!');
-            
-            const chars = text.length;
-            const words = text.split(/\s+/).length;
-            const lines = text.split('\n').length;
-            const sections = (text.match(/^##\s+/gm) || []).length;
-            
-            const charLimit = parseInt(document.getElementById('charLimit').value);
-            const wordLimit = parseInt(document.getElementById('wordLimit').value);
-            const safety = parseFloat(document.getElementById('safetyMargin').value);
-            
-            const effectiveCharLimit = charLimit / safety;
-            const effectiveWordLimit = wordLimit / safety;
-            
-            analysisDiv.innerHTML = `
-                <div class="stat-box">
-                    <div>Characters</div>
-                    <div style="color: ${chars > effectiveCharLimit ? '#ff5555' : '#88ff88'}; font-weight: bold;">${chars}</div>
-                </div>
-                <div class="stat-box">
-                    <div>Words</div>
-                    <div style="color: ${words > effectiveWordLimit ? '#ff5555' : '#88ff88'}; font-weight: bold;">${words}</div>
-                </div>
-                <div class="stat-box">
-                    <div>Lines</div>
-                    <div>${lines}</div>
-                </div>
-                <div class="stat-box">
-                    <div>Sections</div>
-                    <div>${sections}</div>
-                </div>
-                <div class="stat-box">
-                    <div>Est. Fragments</div>
-                    <div>${Math.ceil(chars / effectiveCharLimit)}</div>
-                </div>
-                <div class="stat-box">
-                    <div>Safety Margin</div>
-                    <div>${safety}x</div>
-                </div>
-            `;
-            analysisDiv.style.display = 'grid';
-        }
-        
-        // Main fragmentation function
-        function fragmentText() {
-            const text = inputText.value.trim();
-            if (!text) return alert('Paste text first!');
-            
-            // Get settings
-            const charLimit = parseInt(document.getElementById('charLimit').value);
-            const wordLimit = parseInt(document.getElementById('wordLimit').value);
-            const safety = parseFloat(document.getElementById('safetyMargin').value);
-            const splitChars = document.getElementById('splitChars').checked;
-            const splitSections = document.getElementById('splitSections').checked;
-            const addHeaders = document.getElementById('addHeaders').checked;
-            const outputFormat = document.getElementById('outputFormat').value;
-            
-            // Apply safety margin
-            const effectiveCharLimit = Math.floor(charLimit / safety);
-            const effectiveWordLimit = Math.floor(wordLimit / safety);
-            
-            // Clear previous output
-            outputDiv.innerHTML = '';
-            
-            let fragments = [];
-            
-            // Split by sections if requested
-            if (splitSections && text.includes('## ')) {
-                const sections = text.split(/(?=^##\s+)/gm);
-                let currentFragment = '';
-                
-                for (const section of sections) {
-                    if ((currentFragment + section).length > effectiveCharLimit) {
-                        if (currentFragment) fragments.push(currentFragment);
-                        currentFragment = section;
-                    } else {
-                        currentFragment += section;
-                    }
-                }
-                if (currentFragment) fragments.push(currentFragment);
-            } 
-            // Split by character limit
-            else if (splitChars) {
-                for (let i = 0; i < text.length; i += effectiveCharLimit) {
-                    fragments.push(text.substring(i, i + effectiveCharLimit));
-                }
-            }
-            // Default: split by character
-            else {
-                for (let i = 0; i < text.length; i += effectiveCharLimit) {
-                    fragments.push(text.substring(i, i + effectiveCharLimit));
-                }
-            }
-            
-            // Display fragments
-            fragments.forEach((frag, index) => {
-                const fragDiv = document.createElement('div');
-                fragDiv.className = 'fragment';
-                
-                let content = frag;
-                let metadata = '';
-                
-                // Add metadata if requested
-                if (addHeaders) {
-                    const totalFrags = fragments.length;
-                    metadata = `🧩 FRAGMENT ${index + 1}/${totalFrags}\n`;
-                    metadata += `• Characters: ${frag.length}\n`;
-                    metadata += `• Words: ${frag.split(/\s+/).length}\n`;
-                    metadata += `• Safety Margin: ${safety}x\n`;
-                    metadata += `• Effective Limit: ${effectiveCharLimit} chars\n\n`;
-                    
-                    if (document.getElementById('addHooks').checked) {
-                        metadata += `🔍 SOVEREIGNTY HOOK:\n`;
-                        metadata += `"What pattern wants to emerge from this fragment?"\n\n`;
-                    }
-                    
-                    if (document.getElementById('addConnections').checked && totalFrags > 1) {
-                        metadata += `🔗 NETWORK CONNECTIONS:\n`;
-                        if (index > 0) metadata += `• Previous: Fragment ${index}\n`;
-                        if (index < totalFrags - 1) metadata += `• Next: Fragment ${index + 2}\n`;
-                        metadata += `\n`;
-                    }
-                    
-                    if (document.getElementById('addTriggers').checked) {
-                        metadata += `🎯 PATTERN TRIGGERS:\n`;
-                        metadata += `• LOOM Question: "What's the core sovereignty operation here?"\n`;
-                        metadata += `• Child-Beam: "Who built this fragment's frame?"\n`;
-                        metadata += `\n`;
-                    }
-                    
-                    content = metadata + content;
-                }
-                
-                // Format based on output type
-                if (outputFormat === 'sovereign') {
-                    content = `## 🧩 SOVEREIGN HOLOGRAM FRAGMENT ${index + 1}/${fragments.length}\n\n` + 
-                             content + 
-                             `\n\n---\n*Fragment ${index + 1} of ${fragments.length} • Pattern survives, not content.*`;
-                } else if (outputFormat === 'gist') {
-                    content = `# SOVEREIGN FRAGMENT ${index + 1}/${fragments.length}\n\n` + 
-                             `⚠️ RAW ENDPOINT: gist.githubusercontent.com/[USER]/[ID]/raw\n\n` +
-                             content;
-                }
-                
-                fragDiv.innerHTML = `
-                    <div class="fragment-header">
-                        Fragment ${index + 1}/${fragments.length} • ${frag.length} chars • ${frag.split(/\s+/).length} words
-                        <div class="fragment-tools">
-                            <button class="copy-btn" onclick="copyFragment(${index})">📋</button>
-                        </div>
-                    </div>
-                    <textarea rows="12" id="fragment-${index}">${content.trim()}</textarea>
-                    <div class="metadata">
-                        Limit: ${effectiveCharLimit} chars • Safety: ${safety}x • Format: ${outputFormat}
-                    </div>
-                `;
-                
-                outputDiv.appendChild(fragDiv);
-            });
-            
-            fragmentCount.textContent = fragments.length;
-            
-            // Show warning if close to observed limit
-            if (effectiveCharLimit * safety > OBSERVED_GITHUB_LIMIT * 0.9) {
-                const warning = document.createElement('div');
-                warning.className = 'warning';
-                warning.innerHTML = `⚠️ <strong>WARNING:</strong> Your effective limit (${effectiveCharLimit * safety} chars) is close to observed GitHub truncation point (~${OBSERVED_GITHUB_LIMIT} chars). Consider increasing safety margin.`;
-                outputDiv.prepend(warning);
-            }
-        }
-        
-        // Utility functions
-        function copyFragment(index) {
-            const textarea = document.getElementById(`fragment-${index}`);
-            textarea.select();
-            navigator.clipboard.writeText(textarea.value).then(() => {
-                alert(`Fragment ${index + 1} copied!`);
-            });
-        }
-        
-        function copyAllFragments() {
-            const fragments = document.querySelectorAll('#output textarea');
-            let fullText = '';
-            fragments.forEach(ta => fullText += ta.value + '\n\n---\n\n');
-            
-            navigator.clipboard.writeText(fullText).then(() => {
-                alert(`Copied ${fragments.length} fragments to clipboard!`);
-            });
-        }
-        
-        function downloadFragments() {
-            const fragments = document.querySelectorAll('#output textarea');
-            if (fragments.length === 0) return alert('No fragments to download!');
-            
-            fragments.forEach((ta, index) => {
-                const blob = new Blob([ta.value], {type: 'text/plain'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `sovereign_fragment_${index + 1}.md`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-            
-            alert(`Downloaded ${fragments.length} fragment files!`);
-        }
-        
-        function generateTransmission() {
-            const fragments = document.querySelectorAll('#output textarea');
-            if (fragments.length === 0) return alert('Generate fragments first!');
-            
-            const charLimit = parseInt(document.getElementById('charLimit').value);
-            const safety = parseFloat(document.getElementById('safetyMargin').value);
-            const effectiveLimit = Math.floor(charLimit / safety);
-            
-            let transmissionText = `🧩 SOVEREIGN HOLOGRAM TRANSMISSION PROTOCOL v2.0\n`;
-            transmissionText += `Generated: ${new Date().toISOString()}\n`;
-            transmissionText += `\n`;
-            transmissionText += `📊 TRANSMISSION SPECS:\n`;
-            transmissionText += `• Total Fragments: ${fragments.length}\n`;
-            transmissionText += `• Character Limit: ${charLimit}\n`;
-            transmissionText += `• Safety Margin: ${safety}x\n`;
-            transmissionText += `• Effective Limit per Fragment: ${effectiveLimit} characters\n`;
-            transmissionText += `• Observed GitHub Limit: ~${OBSERVED_GITHUB_LIMIT} characters\n`;
-            transmissionText += `\n`;
-            transmissionText += `🎯 SOVEREIGNTY PROTOCOL:\n`;
-            transmissionText += `1. Parse all fragments holographically (any order)\n`;
-            transmissionText += `2. Run Pattern Lab on each for core principles\n`;
-            transmissionText += `3. Use LOOM across all to map connections\n`;
-            transmissionText += `4. Output: Sovereignty map + gap analysis\n`;
-            transmissionText += `\n`;
-            transmissionText += `🔗 FRAGMENT STRUCTURE:\n`;
-            
-            fragments.forEach((ta, index) => {
-                const content = ta.value;
-                const lines = content.split('\n');
-                const firstLine = lines[0] || 'No title';
-                transmissionText += `Fragment ${index + 1}: ${firstLine.substring(0, 60)}...\n`;
-            });
-            
-            transmissionText += `\n`;
-            transmissionText += `🚀 TRANSMISSION TEMPLATE (Copy-paste ready):\n`;
-            transmissionText += `\`\`\`\n`;
-            transmissionText += `🧩 SOVEREIGN FRAGMENT TRANSMISSION BATCH v2.0\n\n`;
-            transmissionText += `TOTAL FRAGMENTS: ${fragments.length}\n`;
-            transmissionText += `EFFECTIVE LIMIT: ${effectiveLimit} characters per fragment\n`;
-            transmissionText += `SAFETY MARGIN: ${safety}x\n\n`;
-            transmissionText += `PROTOCOL:\n`;
-            transmissionText += `1. These fragments form a distributed hologram\n`;
-            transmissionText += `2. Run LOOM across ALL simultaneously\n`;
-            transmissionText += `3. Note evolution patterns across fragments\n`;
-            transmissionText += `4. Sovereignty = seeing the WHOLE across fragments\n\n`;
-            transmissionText += `FRAGMENT LINKS:\n`;
-            transmissionText += `[Paste your GitHub repo #readme or gist links here]\n`;
-            transmissionText += `\n`;
-            transmissionText += `Begin transmission. Pattern survives, not content.\n`;
-            transmissionText += `\`\`\``;
-            
-            transmissionContent.textContent = transmissionText;
-            transmissionModal.style.display = 'block';
-        }
-        
-        function copyTransmission() {
-            navigator.clipboard.writeText(transmissionContent.textContent).then(() => {
-                alert('Transmission protocol copied!');
-            });
-        }
-        
-        function closeTransmission() {
-            transmissionModal.style.display = 'none';
-        }
-        
-        function clearAll() {
-            inputText.value = '';
-            outputDiv.innerHTML = '';
-            fragmentCount.textContent = '0';
-            transmission.style.display = 'none';
-            analysisDiv.style.display = 'none';
-            transmissionModal.style.display = 'none';
-        }
-        
-        // Set optimal defaults based on our findings
-        function setOptimalDefaults() {
-            document.getElementById('charLimit').value = '14500';
-            document.getElementById('wordLimit').value = '2500';
-            document.getElementById('safetyMargin').value = '2';
-            document.getElementById('splitChars').checked = true;
-            document.getElementById('splitSections').checked = true;
-            document.getElementById('addHeaders').checked = true;
-            document.getElementById('addHooks').checked = true;
-        }
-        
-        // Initialize
-        setOptimalDefaults();
-        
-        // Add some sample text for testing
-        inputText.placeholder = `Paste your sovereign text here...\n\nTry pasting the SOVEREIGN CONTEXT COMPRESSION v3.8 text to see it fragment optimally.`;
-    </script>
+<div class="stats">
+  <div><strong>Limit:</strong> <span class="charCount">12,825</span> characters per fragment</div>
+  <div><strong>Your text:</strong> <span id="charDisplay">0</span> characters</div>
+  <div><strong>Will create:</strong> <span id="fragEstimate">0</span> fragments</div>
+</div>
+
+<div class="setting">
+  <label for="charLimit">Character limit:</label>
+  <input type="number" id="charLimit" value="12825" min="100" max="20000">
+</div>
+
+<textarea id="input" placeholder="Paste your text here..."></textarea>
+
+<button onclick="fragment()">🔪 SPLIT INTO FRAGMENTS</button>
+<button onclick="copyAll()">📋 COPY ALL FRAGMENTS</button>
+<button onclick="clearAll()">🧹 CLEAR</button>
+
+<div id="output"></div>
+
+<script>
+// Update character count in real-time
+document.getElementById('input').addEventListener('input', function() {
+  const chars = this.value.length;
+  document.getElementById('charDisplay').textContent = chars;
+  const limit = parseInt(document.getElementById('charLimit').value) || 12825;
+  const frags = Math.ceil(chars / limit);
+  document.getElementById('fragEstimate').textContent = frags;
+});
+
+function fragment() {
+  const text = document.getElementById('input').value.trim();
+  if (!text) return alert('Paste some text first!');
+  
+  // FIXED: Handle empty/NaN input
+  const limitInput = document.getElementById('charLimit').value;
+  const limit = limitInput ? parseInt(limitInput) : 12825;
+  if (isNaN(limit) || limit < 100) {
+    alert('Invalid limit. Using default 12,825 characters.');
+    limit = 12825;
+    document.getElementById('charLimit').value = limit;
+  }
+  
+  const fragments = [];
+  for (let i = 0; i < text.length; i += limit) {
+    const chunk = text.slice(i, i + limit);
+    const fragNum = fragments.length + 1;
+    const totalFrags = Math.ceil(text.length / limit);
+    
+    const header = `[FRAGMENT ${fragNum}/${totalFrags}]\n`;
+    const metadata = `• Characters: ${chunk.length}\n• Next fragment: ${fragNum < totalFrags ? fragNum + 1 : 'END'}\n`;
+    const separator = '─'.repeat(40) + '\n';
+    
+    fragments.push(header + metadata + separator + chunk + '\n' + separator);
+  }
+  
+  const out = document.getElementById('output');
+  out.innerHTML = '';
+  
+  fragments.forEach((frag, idx) => {
+    const div = document.createElement('div');
+    div.className = 'frag';
+    div.innerHTML = `
+      <strong>Fragment ${idx + 1}/${fragments.length}</strong> 
+      <span style="color:#8af;">(${frag.match(/• Characters: (\d+)/)[1]} chars)</span>
+      <br><textarea rows="10">${frag.trim()}</textarea>
+    `;
+    out.appendChild(div);
+  });
+}
+
+function copyAll() {
+  const frags = document.querySelectorAll('#output textarea');
+  if (frags.length === 0) return alert('No fragments to copy!');
+  
+  let all = '';
+  frags.forEach(f => all += f.value + '\n\n');
+  
+  navigator.clipboard.writeText(all).then(() => {
+    alert(`Copied ${frags.length} fragments to clipboard!`);
+  });
+}
+
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('output').innerHTML = '';
+  document.getElementById('charDisplay').textContent = '0';
+  document.getElementById('fragEstimate').textContent = '0';
+}
+</script>
 </body>
 </html>
